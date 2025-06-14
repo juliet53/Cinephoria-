@@ -14,6 +14,14 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Label\LabelAlignment;
+use Endroid\QrCode\Label\Font\OpenSans;
+use Endroid\QrCode\RoundBlockSizeMode;
+use Endroid\QrCode\Writer\PngWriter;
+
 
 class ReservationController extends AbstractController
 {
@@ -122,6 +130,44 @@ class ReservationController extends AbstractController
 
             // Mettre à jour les places disponibles
             $seance->reserverPlaces($placeReserve);
+
+            // Générer le QR Code
+            $qrContent = sprintf(
+                "Réservation\nFilm: %s\nDate: %s\nPlaces: %s\nPrix: %.2f€",
+                $seance->getFilm()->getTitle(),
+                $seance->getDateHeureDebut()->format('Y-m-d H:i'),
+                implode(', ', $selectedSeats),
+                $prixTotal
+            );
+
+           $builder = new Builder(
+            writer: new PngWriter(),
+            writerOptions: [],
+            validateResult: false,
+            data: $qrContent,
+            encoding: new Encoding('UTF-8'),
+            errorCorrectionLevel: ErrorCorrectionLevel::High, // Utilisation de l'alias
+            size: 300,
+            margin: 10,
+            roundBlockSizeMode: RoundBlockSizeMode::Margin,
+            labelText: 'Cinéphoria',
+            labelFont: new OpenSans(16),
+            labelAlignment: LabelAlignment::Center
+        );
+
+        $result = $builder->build();
+
+            $qrCodeFilename = 'qrcode_' . uniqid() . '.png';
+            $qrCodePath = '/qrcodes/' . $qrCodeFilename;
+            $fullQrCodePath = $this->getParameter('kernel.project_dir') . '/public' . $qrCodePath;
+
+            // Crée le dossier s'il n'existe pas
+            if (!file_exists(dirname($fullQrCodePath))) {
+                mkdir(dirname($fullQrCodePath), 0775, true);
+            }
+
+            file_put_contents($fullQrCodePath, $result->getString());
+            $reservation->setQrCodePath($qrCodePath);
 
             // Enregistrer dans MongoDB
             try {

@@ -28,6 +28,9 @@ class Reservation
     #[ORM\Column(type: 'json', nullable: true)] 
     private ?array $seats = [];
 
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $qrCodePath = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,6 +91,16 @@ class Reservation
     public function setSeats(?array $seats): static
     {
         $this->seats = $seats;
+        return $this;
+    }
+    public function getQrCodePath(): ?string
+    {
+        return $this->qrCodePath;
+    }
+
+    public function setQrCodePath(?string $qrCodePath): self
+    {
+        $this->qrCodePath = $qrCodePath;
         return $this;
     }
 }
