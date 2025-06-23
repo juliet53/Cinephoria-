@@ -6,31 +6,46 @@ use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['reservation:read']],
+    paginationEnabled: false
+)]
+#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 class Reservation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['reservation:read'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['reservation:read'])]
     private ?int $placeReserve = null;
 
     #[ORM\Column]
+    #[Groups(['reservation:read'])]
     private ?float $prix = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
+    #[Groups(['reservation:read'])]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
+    #[Groups(['reservation:read'])]
     private ?Seance $seance = null;
 
-    #[ORM\Column(type: 'json', nullable: true)] 
+    #[ORM\Column(type: 'json', nullable: true)]
+    #[Groups(['reservation:read'])]
     private ?array $seats = [];
 
     #[ORM\Column(type: 'string', nullable: true)]
+    #[Groups(['reservation:read'])]
     private ?string $qrCodePath = null;
 
     public function getId(): ?int
@@ -46,7 +61,6 @@ class Reservation
     public function setPlaceReserve(int $placeReserve): static
     {
         $this->placeReserve = $placeReserve;
-
         return $this;
     }
 
@@ -58,7 +72,6 @@ class Reservation
     public function setPrix(float $prix): static
     {
         $this->prix = $prix;
-
         return $this;
     }
 
@@ -81,7 +94,6 @@ class Reservation
     public function setSeance(?Seance $seance): static
     {
         $this->seance = $seance;
-
         return $this;
     }
 
@@ -95,12 +107,13 @@ class Reservation
         $this->seats = $seats;
         return $this;
     }
+
     public function getQrCodePath(): ?string
     {
         return $this->qrCodePath;
     }
 
-    public function setQrCodePath(?string $qrCodePath): self
+    public function setQrCodePath(?string $qrCodePath): static
     {
         $this->qrCodePath = $qrCodePath;
         return $this;

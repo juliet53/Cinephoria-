@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SeanceRepository::class)]
 #[ApiResource]
@@ -16,25 +17,31 @@ class Seance
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['reservation:read'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['reservation:read'])]
     private ?\DateTimeInterface $dateHeureDebut = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['reservation:read'])]
     private ?\DateTimeInterface $dateHeureFin = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $qualite = null; 
+    #[Groups(['reservation:read'])]
+    private ?string $qualite = null;
 
     #[ORM\Column]
     private ?int $placeDisponible = null;
 
     #[ORM\ManyToOne(inversedBy: 'seances')]
-    private ?Film $film = null; 
+    #[Groups(['reservation:read'])]
+    private ?Film $film = null;
 
     #[ORM\ManyToOne(inversedBy: 'seances')]
-    private ?Salle $salle = null; 
+    #[Groups(['reservation:read'])]
+    private ?Salle $salle = null;
 
     /**
      * @var Collection<int, Reservation>
@@ -43,6 +50,7 @@ class Seance
     private Collection $reservations;
 
     #[ORM\Column]
+    #[Groups(['reservation:read'])]
     private ?float $prix = null;
 
     public function __construct()
@@ -63,7 +71,6 @@ class Seance
     public function setDateHeureDebut(\DateTimeInterface $dateHeureDebut): static
     {
         $this->dateHeureDebut = $dateHeureDebut;
-
         return $this;
     }
 
@@ -75,7 +82,6 @@ class Seance
     public function setDateHeureFin(\DateTimeInterface $dateHeureFin): static
     {
         $this->dateHeureFin = $dateHeureFin;
-
         return $this;
     }
 
@@ -87,7 +93,6 @@ class Seance
     public function setQualite(string $qualite): static
     {
         $this->qualite = $qualite;
-
         return $this;
     }
 
@@ -99,16 +104,16 @@ class Seance
     public function setPlaceDisponible(int $placeDisponible): static
     {
         $this->placeDisponible = $placeDisponible;
-
         return $this;
     }
+
     public function reserverPlaces(int $placesReservees): bool
     {
         if ($this->placeDisponible >= $placesReservees) {
             $this->placeDisponible -= $placesReservees;
-            return true;  
+            return true;
         }
-        return false;  // il y a pas assez de places dispo
+        return false;
     }
 
     public function getFilm(): ?Film
@@ -119,7 +124,6 @@ class Seance
     public function setFilm(?Film $film): static
     {
         $this->film = $film;
-
         return $this;
     }
 
@@ -131,7 +135,6 @@ class Seance
     public function setSalle(?Salle $salle): static
     {
         $this->salle = $salle;
-
         return $this;
     }
 
@@ -156,7 +159,6 @@ class Seance
     public function removeReservation(Reservation $reservation): static
     {
         if ($this->reservations->removeElement($reservation)) {
-            // set the owning side to null (unless already changed)
             if ($reservation->getSeance() === $this) {
                 $reservation->setSeance(null);
             }
@@ -173,7 +175,6 @@ class Seance
     public function setPrix(float $prix): static
     {
         $this->prix = $prix;
-
         return $this;
     }
 }

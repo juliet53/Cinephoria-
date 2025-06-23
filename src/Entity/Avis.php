@@ -5,28 +5,43 @@ namespace App\Entity;
 use App\Repository\AvisRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: AvisRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['avis:read']],
+    denormalizationContext: ['groups' => ['avis:write']]
+)]
 class Avis
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['avis:read', 'film:read'])]
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['avis:read', 'avis:write', 'film:read'])]
     private ?float $note = null;
 
     #[ORM\ManyToOne(inversedBy: 'avis')]
+    #[Groups(['avis:read', 'avis:write'])]
+    #[MaxDepth(1)]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'avis')]
+    #[Groups(['avis:read', 'avis:write'])] // Exclure 'film:read' pour éviter la boucle
+    #[MaxDepth(1)]
     private ?Film $film = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['avis:read', 'avis:write', 'film:read'])]
     private ?string $Commentaire = null;
 
     #[ORM\Column]
+    #[Groups(['avis:read', 'avis:write', 'film:read'])]
     private ?bool $valide = null;
 
     public function getId(): ?int
