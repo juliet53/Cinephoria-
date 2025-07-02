@@ -29,8 +29,8 @@ jobs:
           restore-keys: |
             php8.2-composer-
 
-      - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
+      - name: Install Composer dependencies (no scripts)
+        run: composer install --prefer-dist --no-interaction --no-scripts --no-progress
 
       - name: Run Security Audit
         run: |

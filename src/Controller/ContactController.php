@@ -37,7 +37,7 @@ class ContactController extends AbstractController
                 $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi du message.');
             }
 
-            // Rediriger vers la page de contact pour vider les champs
+            // Rediriger vers la page de contact pour vider les champs 
             return $this->redirectToRoute('app_contact');
         }
 
