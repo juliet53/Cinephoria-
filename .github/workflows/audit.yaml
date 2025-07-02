@@ -16,6 +16,7 @@ jobs:
         with:
           php-version: 8.2
           tools: composer:v2
+          extensions: mongodb-1.18.0
 
       - name: Setup Composer Cache
         run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
