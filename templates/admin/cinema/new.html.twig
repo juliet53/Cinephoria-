@@ -3,34 +3,36 @@
 {% block title %}Ajouter un Cinéma{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
+<div class="container-fluid px-1 mt-2 mt-md-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-lg border-0">
-                <div class="card-header  text-white text-center">
-                    <h2 class="mb-0">Ajouter un Cinéma</h2>
+        <div class="col-12 col-md-12 col-lg-8">
+            <div class="card card-add shadow-lg border-0">
+                <div class="card-header text-black text-center py-2 py-md-3">
+                    <h2 class="mb-0 fs-4 fs-md-2">Ajouter un Cinéma</h2>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-2 p-sm-3 p-md-4">
                     {{ form_start(form) }}
-                    
-                    <div class="mb-3">
+                                         
+                    <div class="mb-2 mb-md-3">
                         {{ form_label(form.nom, 'Nom du Cinéma', {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                        {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Cinéma Gaumont'}}) }}
+                        {{ form_widget(form.nom, {'attr': {'class': 'form-control form-control-sm form-control-md-lg', 'placeholder': 'Ex: Cinéma Gaumont'}}) }}
                         {{ form_errors(form.nom) }}
                     </div>
-
-                    <div class="mb-3">
+                     
+                    <div class="mb-3 mb-md-4">
                         {{ form_label(form.ville, 'Ville', {'label_attr': {'class': 'form-label fw-bold'}}) }}
-                        {{ form_widget(form.ville, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Paris'}}) }}
+                        {{ form_widget(form.ville, {'attr': {'class': 'form-control form-control-sm form-control-md-lg', 'placeholder': 'Ex: Paris'}}) }}
                         {{ form_errors(form.ville) }}
                     </div>
-
-                    
-
-                    <button type="submit" class="btn btn-success w-100">Ajouter</button>
+                                           
+                    <div class="d-grid mb-2 mb-md-3">
+                        <button type="submit" class="btn btn-success btn-sm btn-md-lg py-2 py-md-3">Ajouter</button>
+                    </div>
                     {{ form_end(form) }}
-
-                    <a href="{{ path('admin_cinema_index') }}" class="btn btn-outline-secondary mt-3 w-100">Retour</a>
+                     
+                    <div class="d-grid">
+                        <a href="{{ path('admin_cinema_index') }}" class="btn btn-outline-secondary btn-sm btn-md-lg py-2 py-md-3">Retour</a>
+                    </div>
                 </div>
             </div>
         </div>

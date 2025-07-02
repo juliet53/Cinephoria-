@@ -39,7 +39,7 @@ class AdminstatController extends AbstractController
                 $reservationsByFilm[$filmId] = [
                     'tickets' => 0,
                     'revenue' => 0,
-                    'title' => $filmId // Par défaut, utilise l'ID si le titre n'est pas trouvé
+                    'title' => $filmId 
                 ];
                 // Récupérer le titre du film
                 $film = $filmRepository->find($filmId);

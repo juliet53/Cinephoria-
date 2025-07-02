@@ -42,7 +42,7 @@ class FilmsController extends AbstractController
     #[Route('/films/{id}', name: 'app_film_show')]
     public function show(int $id, FilmRepository $filmRepository, EntityManagerInterface $entityManager, Request $request, AvisRepository $avisRepository): Response
     {
-        // Récupérer le film par ID
+        // Récupérer le film 
         $film = $filmRepository->find($id);
 
         // Redirection si le film n'existe pas
@@ -50,14 +50,14 @@ class FilmsController extends AbstractController
             throw $this->createNotFoundException('Le film demandé n\'existe pas.');
         }
 
-        // Récupérer les trois derniers avis validés, triés par ID descendant
+        // Récupérer les trois derniers avis validés, triés par ID descendant !!!!!!!!!!!!!!
         $avisValides = $avisRepository->findBy(
             ['film' => $film, 'valide' => true],
             ['id' => 'DESC'],
             3 // Limiter à 3 avis
         );
 
-        // Créer le formulaire uniquement si l'utilisateur est connecté
+        // Créer le formulaire uniquement si l'utilisateur est CONNECTER
         $form = null;
         if ($this->isGranted('ROLE_USER')) {
             $avis = new Avis();

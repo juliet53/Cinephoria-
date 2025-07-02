@@ -35,7 +35,7 @@ class FilmController extends AbstractController
 
             // Si un fichier est téléchargé
             if ($imageFile) {
-                // Récupérer les informations du fichier téléchargé
+                // Récup infos du fichire télécharge 
                 $film->setImageName($imageFile->getClientOriginalName());
                 $film->setImageSize($imageFile->getSize());
 
@@ -43,7 +43,7 @@ class FilmController extends AbstractController
                 $film->setImageFile($imageFile);
             }
 
-            // Persist le film dans la base de données
+            
             $entityManager->persist($film);
             $entityManager->flush();
 
@@ -74,7 +74,7 @@ class FilmController extends AbstractController
             }
 
             // Mettre à jour les genres
-            $film->getGenres()->clear(); // Supprimer les anciens genres
+            $film->getGenres()->clear(); 
             foreach ($form->get('genres')->getData() as $genre) {
                 $film->addGenre($genre);
             }

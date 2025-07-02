@@ -27,7 +27,7 @@ class AdminUserController extends AbstractController
         ]);
     }
 
-    // Ajouter un nouvel utilisateur
+    
     #[Route('/admin/user/new', name: 'admin_user_new')]
     public function new(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {

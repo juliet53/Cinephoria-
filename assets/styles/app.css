@@ -8,3 +8,29 @@ body {
 .card {
   background-color: #bbd5db;
 }
+.card-add{
+  background-color: #fff;
+}
+
+@media (max-width: 767px) {
+    #films-container .film-card {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    #films-container {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+}
+
+
+@media (max-width: 767px) {
+    .film-card {
+        display: block !important;
+        width: 100% !important;
+        float: none !important;
+    }
+}

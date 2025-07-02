@@ -47,9 +47,7 @@
 		<h2 class="mt-5 mb-4">Séances Disponibles</h2>
 		<div class="row">
 			{% for seance in film.seances %}
-				<div
-					class="col-md-4 mb-4">
-					<!-- Pour les séances -->
+				<div class="col-12 col-lg-4 mt-5">
 					<div class="card">
 						<div class="card-header">
 							Séance le
@@ -105,7 +103,7 @@
 		<div class="row">
 			{% if avisValides is not empty %}
 				{% for avis in avisValides %}
-					<div class="col-md-4 mb-4">
+					<div class="col-12 col-lg-4 mt-5">
 						<div class="card">
 							<div class="card-body">
 								<h5 class="card-title">{{ avis.user.email }}</h5>

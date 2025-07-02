@@ -57,7 +57,7 @@
 
 		<div class="row" id="seancesContainer">
 			{% for seance in seances %}
-				<div class="col-md-4 mb-4 seance-card disabled" data-id="{{ seance.id }}" data-film="{{ seance.film.title }}" data-date="{{ seance.dateHeureDebut|date('Y-m-d') }}" data-places="{{ seance.getPlaceDisponible() }}" data-reserved-seats="{{ reservedSeatsBySeance[seance.id]|json_encode|e('html_attr') }}" onclick="toggleSelection(this)">
+				<div class="col-12 col-lg-4 mt-5 seance-card disabled" data-id="{{ seance.id }}" data-film="{{ seance.film.title }}" data-date="{{ seance.dateHeureDebut|date('Y-m-d') }}" data-places="{{ seance.getPlaceDisponible() }}" data-reserved-seats="{{ reservedSeatsBySeance[seance.id]|json_encode|e('html_attr') }}" onclick="toggleSelection(this)">
 					<div class="card h-100 shadow-sm" style="cursor: pointer;">
 						<div class="card-header text-dark">{{ seance.salle.cinema.ville }}</div>
 						<div class="card-body">

@@ -10,17 +10,20 @@ use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SalleRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['salle:read']]
+)]
+
 class Salle
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['reservation:read'])]
+   #[Groups(['reservation:read', 'incident:read'])]
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['reservation:read'])]
+    #[Groups(['reservation:read', 'incident:read', 'salle:read'])]
     private ?int $numero = null;
 
     #[ORM\Column]
@@ -36,11 +39,19 @@ class Salle
     private Collection $seances;
 
     #[ORM\ManyToOne(inversedBy: 'salle')]
+    #[Groups(['incident:read', 'salle:read'])]
     private ?Cinema $cinema = null;
+
+    /**
+     * @var Collection<int, Incident>
+     */
+    #[ORM\OneToMany(targetEntity: Incident::class, mappedBy: 'salle')]
+    private Collection $incidents;
 
     public function __construct()
     {
         $this->seances = new ArrayCollection();
+        $this->incidents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -122,6 +133,36 @@ class Salle
     public function setCinema(?Cinema $cinema): static
     {
         $this->cinema = $cinema;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Incident>
+     */
+    public function getIncidents(): Collection
+    {
+        return $this->incidents;
+    }
+
+    public function addIncident(Incident $incident): static
+    {
+        if (!$this->incidents->contains($incident)) {
+            $this->incidents->add($incident);
+            $incident->setSalle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIncident(Incident $incident): static
+    {
+        if ($this->incidents->removeElement($incident)) {
+            // set the owning side to null (unless already changed)
+            if ($incident->getSalle() === $this) {
+                $incident->setSalle(null);
+            }
+        }
 
         return $this;
     }

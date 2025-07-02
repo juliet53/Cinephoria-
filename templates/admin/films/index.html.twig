@@ -3,25 +3,25 @@
 {% block title %}Films{% endblock %}
 
 {% block body %}
-<div class="container d-flex justify-content-center align-items-center mt-5">
-    <div class=" shadow-lg p-4 w-75">
+<div class="container-xl mt-5">  {# container élargi (xl = max 1140px) #}
+    <div class="shadow-lg p-4 bg-white rounded">
         <h1 class="mb-4 text-center">Gestion des Films</h1>
 
         <div class="d-flex justify-content-end mb-3">
-            <a href="{{ path('admin_films_new') }}" class="btn btn-success">
+            <a href="{{ path('admin_films_new') }}" class="btn btn-success btn-sm">
                 <i class="fas fa-plus"></i> Ajouter un film
             </a>
         </div>
 
         <div class="table-responsive">
-            <table class="table table-hover table-bordered">
-                <thead class=" text-center">
+            <table class="table table-hover table-bordered align-middle">
+                <thead class="text-center">
                     <tr>
-                        <th>Image</th>
-                        <th>Titre</th>
-                        <th>Réalisateur</th>
-                        <th>Genres</th>
-                        <th>Actions</th>
+                        <th style="min-width: 100px;">Image</th>
+                        <th style="min-width: 150px;">Titre</th>
+                        <th class="d-none d-sm-table-cell" style="min-width: 120px;">Réalisateur</th>
+                        <th class="d-none d-sm-table-cell" style="min-width: 150px;">Genres</th>
+                        <th style="min-width: 140px;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,15 +29,14 @@
                         <tr>
                             <td class="text-center">
                                 {% if film.imageName %}
-                                    <!-- Modification du chemin de l'image -->
-                                    <img src="{{ asset('images/Film/' ~ film.imageName) }}" alt="Image du film" style="max-height: 50px; width: auto;">
+                                    <img src="{{ asset('images/Film/' ~ film.imageName) }}" alt="Image du film" style="max-height: 50px; width: auto;" class="img-fluid">
                                 {% else %}
                                     <span class="text-muted">Aucune image</span>
                                 {% endif %}
                             </td>
                             <td>{{ film.title }}</td>
-                            <td>{{ film.director }}</td>
-                            <td>
+                            <td class="d-none d-sm-table-cell">{{ film.director }}</td>
+                            <td class="d-none d-sm-table-cell">
                                 {% for genre in film.genres %}
                                     <span class="badge bg-info text-dark">{{ genre.nom }}</span>
                                 {% else %}
@@ -45,7 +44,7 @@
                                 {% endfor %}
                             </td>
                             <td class="text-center">
-                                <a href="{{ path('admin_films_edit', {'id': film.id}) }}" class="btn btn-primary btn-sm">
+                                <a href="{{ path('admin_films_edit', {'id': film.id}) }}" class="btn btn-primary btn-sm mb-1">
                                     <i class="fas fa-edit"></i> Modifier
                                 </a>
                                 <a href="{{ path('admin_films_delete', {'id': film.id}) }}" 
@@ -71,5 +70,4 @@
         return confirm("Voulez-vous vraiment supprimer ce film ?");
     }
 </script>
-
 {% endblock %}
