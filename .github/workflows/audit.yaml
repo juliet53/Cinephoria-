@@ -1,50 +1,51 @@
 name: Security Audit
 on: [push, pull_request]
 jobs:
-  name: Security Audit
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+  audit:
+    name: Security Audit
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with: 
-        php-version: 8.2
-        tools: composer:v2 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with: 
+          php-version: 8.2
+          tools: composer:v2 
 
-    - name: Setup Cache 
-      run: echo "COMPOSER_CACHE _DIR=$(composer config cache-dir)" >> $GITHUB_ENV
+      - name: Setup Cache 
+        run: echo "COMPOSER_CACHE _DIR=$(composer config cache-dir)" >> $GITHUB_ENV
 
-    - name: Caching deps
-      uses: actions/cache@v4
-      with:
-        path: ${{env.COMPOSER_CACHE_DIR}}
-        key: php8.2-composer-${{ hashFiles('**/composer.json') }}
-        restore-keys:
-          php8.2-composer-latest-
+      - name: Caching deps
+        uses: actions/cache@v4
+        with:
+          path: ${{env.COMPOSER_CACHE_DIR}}
+          key: php8.2-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys:
+            php8.2-composer-latest-
 
-    - name: Update composer 
-      run: composer self update
+      - name: Update composer 
+        run: composer self update
 
-    - name: install deps 
-      run: composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
+      - name: install deps 
+        run: composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
-    - name: security audit 
-      run: | 
-        composer audit \
-          --no-dev \ 
-          --abandoned="report" \
-          --ignore-severity="low" \
-          --ignore-severity="medium" \
-          --format="json" \
-          --no-ansi \
-          > /tmp/security-audit.json
-    
-    - name: upload security audit report
-      uses: action/upload-artifact@v4
-      if: always()
-      with:
-        name: security-audit
-        path: /tmp/security-audit.json
+      - name: security audit 
+        run: | 
+          composer audit \
+            --no-dev \ 
+            --abandoned="report" \
+            --ignore-severity="low" \
+            --ignore-severity="medium" \
+            --format="json" \
+            --no-ansi \
+            > /tmp/security-audit.json
+      
+      - name: upload security audit report
+        uses: action/upload-artifact@v4
+        if: always()
+        with:
+          name: security-audit
+          path: /tmp/security-audit.json
 
         
