@@ -19,7 +19,7 @@ class ReservationTest extends KernelTestCase
 
         $reservation = New Reservation();
         $reservation->setPrix('10')
-                    ->setUserset($user)
+                    ->setUser($user)
                     ->setSeance($seance)
                     ->setSeats(["B3"]);
                     

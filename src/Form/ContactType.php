@@ -21,7 +21,7 @@ class ContactType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => null, // Important si tu n'utilises pas une entité ou une classe personnalisée
+            'data_class' => null, 
         ]);
     }
 }

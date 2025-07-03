@@ -1,0 +1,56 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+
+    services:
+      database:
+        image: mariadb:10.7.3
+        env:
+          MARIADB_USER: root
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: app_test
+        ports:
+          - 3306/tcp
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          tools: composer:v2
+
+      - name: Setup Composer Cache
+        run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.COMPOSER_CACHE_DIR }}
+          key: php8.3-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            php8.3-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Wait for DB
+        run: sleep 10
+
+      - name: Run PHPUnit
+        run: composer app:tests
+        env:
+          APP_ENV: test
+          DATABASE_URL: mysql://root:root@127.0.0.1:${{ job.services.database.ports['3306'] }}/app_test
