@@ -40,12 +40,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.COMPOSER_CACHE_DIR }}
-          key: php8.3-composer-${{ hashFiles('**/composer.lock') }}
+          key: php8.2-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            php8.3-composer-
+            php8.2-composer-
 
       - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
+        run: composer install --prefer-dist --no-interaction --no-scripts --no-progress
 
       - name: Wait for DB
         run: sleep 10
