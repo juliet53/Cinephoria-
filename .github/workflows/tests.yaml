@@ -11,7 +11,7 @@ jobs:
       database:
         image: mariadb:10.7.3
         env:
-          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'  # << obligatoire si mot de passe vide
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
           MARIADB_DATABASE: cinephoria_test
         ports:
           - 3306/tcp
@@ -45,6 +45,13 @@ jobs:
 
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-interaction --no-scripts --no-progress
+        # Important: retirer --no-scripts ou sinon faire un step à part avec composer run scripts
+
+      - name: Install importmap assets
+        run: php bin/console importmap:install
+
+      - name: Clear cache
+        run: php bin/console cache:clear --env=test
 
       - name: Wait for DB
         run: sleep 10
@@ -53,4 +60,4 @@ jobs:
         run: php bin/phpunit
         env:
           APP_ENV: test
-          DATABASE_URL: mysql://root:@127.0.0.1:${{ job.services.database.ports['3306'] }}/cinephoria
+          DATABASE_URL: mysql://root:@127.0.0.1:${{ job.services.database.ports['3306'] }}/cinephoria_test
