@@ -59,4 +59,4 @@ jobs:
         run: php bin/phpunit
         env:
           APP_ENV: test
-          DATABASE_URL: mysql://root:@127.0.0.1:${{ job.services.database.ports['3306'] }}/cinephoria_test
+          DATABASE_URL: mysql://root:@127.0.0.1:${{ job.services.database.ports['3306'] }}/cinephoria
