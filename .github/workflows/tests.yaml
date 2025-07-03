@@ -50,8 +50,7 @@ jobs:
       - name: Install importmap assets
         run: php bin/console importmap:install
 
-      - name: Clear cache
-        run: php bin/console cache:clear --env=test
+      
 
       - name: Wait for DB
         run: sleep 10
