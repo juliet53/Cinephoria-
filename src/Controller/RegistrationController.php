@@ -22,7 +22,8 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
+        if ($form->isValid()) {
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
@@ -32,11 +33,14 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // do anything else you need here, like send an email
-
             return $security->login($user, UsersAuthenticator::class, 'main');
+        } else {
+            // Log les erreurs pour debugging
+            foreach ($form->getErrors(true) as $error) {
+                error_log('Form error: ' . $error->getMessage());
+            }
         }
-
+    }
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
         ]);
