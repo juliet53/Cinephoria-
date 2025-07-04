@@ -11,6 +11,10 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+        // Débogage : Vérifier le jeton CSRF et les données POST
+        $token = $csrfTokenManager->getToken('authenticate')->getValue();
+        dump($token, $request->request->all(), $request->getSession()->all());
+        
         // Si l'utilisateur est déjà connecté, redirige-le vers le tableau de bord approprié en fonction de son rôle
         if ($this->getUser()) {
             // Si l'utilisateur a le rôle "ROLE_ADMIN"
