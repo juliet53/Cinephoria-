@@ -44,6 +44,7 @@ security:
         login_path: app_login
         check_path: app_login
         default_target_path: /redirect # Redirection après la connexion
+        csrf_token_id: authenticate
 
   # Contrôle d'accès
   access_control:

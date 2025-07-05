@@ -43,6 +43,7 @@
                         <button type="submit" class="btn btn-primary btn-lg">S'inscrire</button>
                     </div>
                     {{ form_row(registrationForm._token) }}
+                    {{ form_row(form._csrf_token) }}
                 {{ form_end(registrationForm) }}
             </div>
         </div>

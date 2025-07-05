@@ -1,48 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connectez-vous
-{% endblock %}
+{% block title %}Connectez-vous{% endblock %}
 
 {% block body %}
-	<div class="container mt-5">
-		<div class="row justify-content-center">
-			<div class="col-md-10 col-lg-6">
-				<form method="post" action="{{ path('app_login') }}">
-                    {% if error %}
-                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-6">
+                {{ form_start(form, {'action': path('app_login'), 'method': 'POST'}) }}
+{% if error %}
+    <div class="alert alert-danger">
+        <strong>Erreur :</strong> {{ error.messageKey|trans(error.messageData, 'security') }}<br>
+        <pre>{{ dump(error) }}</pre> {# Affiche toute la variable d'erreur pour debug #}
+    </div>
+{% endif %}
+
+                    {% if app.user %}
+                        <div class="mb-3">
+                            You are logged in as {{ app.user.userIdentifier }},
+                            <a href="{{ path('app_logout') }}">Logout</a>
+                        </div>
                     {% endif %}
 
-					{% if app.user %}
-						<div class="mb-3">
-							You are logged in as
-							{{ app.user.userIdentifier }},
-							<a href="{{ path('app_logout') }}">Logout</a>
-						</div>
-					{% endif %}
+                    <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
 
-					<h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
-					<label for="inputEmail">Email</label>
-					<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-					<label for="inputPassword">Password</label>
-					<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+                    {{ form_row(form.email, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_row(form.password, {'attr': {'class': 'form-control'}}) }}
+                   
+                    
 
-					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <div class="checkbox mb-3">
+                        {{ form_label(form._remember_me) }}
+                        {{ form_widget(form._remember_me) }}
+                    </div>
+                    <div class="mb-3">
+                        <a href="{{ path('app_register') }}">Inscrivez-vous</a>
+                    </div>
+					
 
-					<div class="checkbox mb-3">
-						<label>
-							<input type="checkbox" name="_remember_me">
-							Remember me
-						</label>
-					</div>
-					<div class = "mb-3">
-						<a href="{{ path('app_register') }}">Inscrivez-vous</a>
-					</div>
-
-					<button class="btn btn-lg btn-primary" type="submit">
-						Sign in
-					</button>
-				</form>
-			</div>
-		</div>
-	</div>
+                    <button class="btn btn-lg btn-primary" type="submit">
+                        Sign in
+                    </button>
+					 
+           
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

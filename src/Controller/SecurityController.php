@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use App\Form\LoginType;
 
 class SecurityController extends AbstractController
 {
@@ -31,16 +32,26 @@ class SecurityController extends AbstractController
             // Si aucun rôle défini, redirige vers la page d'accueil (par défaut)
             return $this->redirectToRoute('app_home');
         }
+        
 
         // Récupérer l'erreur de connexion si il y en a une
         $error = $authenticationUtils->getLastAuthenticationError();
         // Récupérer le dernier nom d'utilisateur entré par l'utilisateur
         $lastUsername = $authenticationUtils->getLastUsername();
+        $loginType = $request->getSession()->get('loginType', 'user');
+        // Créer le formulaire
+        $form = $this->createForm(LoginType::class, null, [
+            'loginType' => $loginType,
+            'csrf_token_id' => 'authenticate',
+             
+        ]);
 
         // Affichage du formulaire de connexion
         return $this->render('security/login.html.twig', [
+            'form' => $form->createView(),
             'last_username' => $lastUsername,
             'error' => $error,
+            'csrf_token' => $token,
         ]);
     }
 
