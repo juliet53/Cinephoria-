@@ -10,7 +10,7 @@
 {% if error %}
     <div class="alert alert-danger">
         <strong>Erreur :</strong> {{ error.messageKey|trans(error.messageData, 'security') }}<br>
-        <pre>{{ dump(error) }}</pre> {# Affiche toute la variable d'erreur pour debug #}
+        {# Affiche toute la variable d'erreur pour debug #}
     </div>
 {% endif %}
 
