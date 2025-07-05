@@ -32,6 +32,7 @@
                         {{ form_label(form._remember_me) }}
                         {{ form_widget(form._remember_me) }}
                     </div>
+					{{ form_row(form._csrf_token) }}
                     <div class="mb-3">
                         <a href="{{ path('app_register') }}">Inscrivez-vous</a>
                     </div>
@@ -41,7 +42,7 @@
                         Sign in
                     </button>
 					 
-           
+                
                 {{ form_end(form) }}
             </div>
         </div>
