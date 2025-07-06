@@ -1,0 +1,32 @@
+# Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
+# flysystem:
+#     storages:
+#         s3:
+#             adapter: 'aws_s3_v3'
+#             options:
+#                 client: '@Aws\S3\S3Client'
+#                 bucket: '%env(BUCKETEER_BUCKET_NAME)%'
+#                 prefix: 'images' 
+# flysystem:
+#   storages:
+#     s3:
+#       adapter: 'aws'
+#       options:
+#         client: '@Aws\S3\S3Client'
+#         bucket: '%env(BUCKETEER_BUCKET_NAME)%'
+#         prefix: 'images'
+
+# flysystem:
+#   storages:
+#     default.storage:
+#       adapter: 'local'
+#       options:
+#         directory: '%kernel.project_dir%/public/images/Film'
+flysystem:
+  storages:
+    default.storage:
+      adapter: 'aws'
+      options:
+        client: 'AwsS3Client'
+        bucket: 'bucketeer-63e6c1dc-17ea-4ba8-bdd9-82869f667264'
+        prefix: 'images/Film'

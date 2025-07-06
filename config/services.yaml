@@ -43,3 +43,16 @@ services:
         tags:
             - { name: 'api_platform.doctrine.orm.query_extension.collection' }
             - { name: 'api_platform.doctrine.orm.query_extension.item' }
+
+    
+    AwsS3Client:
+        class: Aws\S3\S3Client
+        public: true
+        arguments:
+        -
+            version: 'latest'
+            region: 'eu-west-1'  # ✅ corrigé
+            credentials:
+            key: '%env(AWS_ACCESS_KEY_ID)%'
+            secret: '%env(AWS_SECRET_ACCESS_KEY)%'
+        
