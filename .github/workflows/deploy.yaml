@@ -3,7 +3,7 @@ name: Deploy to Heroku
 on:
   push:
     branches:
-      - master  
+      - master 
 
 jobs:
   deploy:
@@ -16,9 +16,13 @@ jobs:
       - name: Install Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
 
-      - name: Deploy to Heroku
+      - name: Login to Heroku Container Registry (via API key)
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: |
-          heroku git:remote -a cinephoriaappj
-          git push heroku master  
+        run: echo $HEROKU_API_KEY | heroku auth:token
+
+      - name: Set Heroku git remote
+        run: heroku git:remote -a cinephoriaappj
+
+      - name: Push to Heroku
+        run: git push heroku master  
