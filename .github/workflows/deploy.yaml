@@ -3,7 +3,7 @@ name: Deploy to Heroku
 on:
   push:
     branches:
-      - main  # Déploie uniquement quand tu pousses sur la branche main
+      - master  # Déploie uniquement quand tu pousses sur la branche main
 
 jobs:
   deploy:
