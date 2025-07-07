@@ -21,6 +21,7 @@ use Endroid\QrCode\Label\LabelAlignment;
 use Endroid\QrCode\Label\Font\OpenSans;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
+use League\Flysystem\FilesystemOperator;
 
 
 class ReservationController extends AbstractController
@@ -32,7 +33,8 @@ class ReservationController extends AbstractController
         ReservationRepository $reservationRepository,
         EntityManagerInterface $entityManager,
         DocumentManager $documentManager,
-        Security $security
+        Security $security,
+        FilesystemOperator $defaultStorage
     ): Response {
         // Récupérer les paramètres de l'URL
         $filmFilter = $request->query->get('film', '');
@@ -157,17 +159,22 @@ class ReservationController extends AbstractController
 
         $result = $builder->build();
 
-            $qrCodeFilename = 'qrcode_' . uniqid() . '.png';
-            $qrCodePath = '/qrcodes/' . $qrCodeFilename;
-            $fullQrCodePath = $this->getParameter('kernel.project_dir') . '/public' . $qrCodePath;
+            // $qrCodeFilename = 'qrcode_' . uniqid() . '.png';
+            // $qrCodePath = '/qrcodes/' . $qrCodeFilename;
+            // $fullQrCodePath = $this->getParameter('kernel.project_dir') . '/public' . $qrCodePath;
 
-            // Crée le dossier s'il n'existe pas
-            if (!file_exists(dirname($fullQrCodePath))) {
-                mkdir(dirname($fullQrCodePath), 0775, true);
-            }
+            // // Crée le dossier s'il n'existe pas
+            // if (!file_exists(dirname($fullQrCodePath))) {
+            //     mkdir(dirname($fullQrCodePath), 0775, true);
+            // }
 
-            file_put_contents($fullQrCodePath, $result->getString());
-            $reservation->setQrCodePath($qrCodePath);
+            // file_put_contents($fullQrCodePath, $result->getString());
+            // $reservation->setQrCodePath($qrCodePath);
+            $qrCodeFilename = 'qrcodes/qrcode_' . uniqid() . '.png';
+            $defaultStorage->write($qrCodeFilename, $result->getString());
+            $qrCodeUrl = 'https://bucketeer-b78e6166-923a-41f5-8eac-7295c143deb0.s3.eu-west-1.amazonaws.com/images/Film/' . $qrCodeFilename;
+            $reservation->setQrCodePath($qrCodeUrl);
+
 
             // Enregistrer dans MongoDB
             try {

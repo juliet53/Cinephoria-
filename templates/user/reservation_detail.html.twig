@@ -31,7 +31,7 @@
                 {% if reservation.qrCodePath %}
                     <div class="mt-4 mb-4">
                         <h5>QR Code de la réservation :</h5>
-                        <img src="{{ asset(reservation.qrCodePath) }}" alt="QR Code" style="max-width: 200px;">
+                        <img src="{{ reservation.qrCodePath }}" alt="QR Code" style="max-width: 200px;">
                     </div>
                 {% endif %}
                 <a href="{{ path('app_user_reservations') }}" class="btn btn-secondary">Retour à la liste</a>
