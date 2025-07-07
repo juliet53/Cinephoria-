@@ -11,6 +11,7 @@
         "api-platform/doctrine-orm": "^4.1",
         "api-platform/symfony": "^4.1",
         "aws/aws-sdk-php": "^3.349",
+        "cloudinary/cloudinary_php": "^3.1",
         "doctrine/dbal": "^3",
         "doctrine/doctrine-bundle": "^2.14",
         "doctrine/doctrine-migrations-bundle": "^3.4",

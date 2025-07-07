@@ -29,7 +29,7 @@
                         <tr>
                             <td class="text-center">
                                 {% if film.imageName %}
-                                    <img src="{{ asset('images/Film/' ~ film.imageName) }}" alt="Image du film" style="max-height: 50px; width: auto;" class="img-fluid">
+                                   <img src="{{ s3BaseUrl ~ 'images/Film/' ~ film.imageName }}" alt="Image du film" style="max-height: 50px; width: auto;" class="img-fluid">
                                 {% else %}
                                     <span class="text-muted">Aucune image</span>
                                 {% endif %}

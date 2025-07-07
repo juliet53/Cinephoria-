@@ -51,8 +51,8 @@ services:
         arguments:
         -
             version: 'latest'
-            region: 'eu-west-1'  # ✅ corrigé
+            region: 'eu-west-1'  
             credentials:
-            key: '%env(AWS_ACCESS_KEY_ID)%'
-            secret: '%env(AWS_SECRET_ACCESS_KEY)%'
+                key: '%env(AWS_ACCESS_KEY_ID)%'
+                secret: '%env(AWS_SECRET_ACCESS_KEY)%'
         

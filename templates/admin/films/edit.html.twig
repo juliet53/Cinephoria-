@@ -51,7 +51,7 @@
                              
                             {% if film.imageName %}
                                 <div class="mb-3 mb-md-4 text-center">
-                                    <img src="{{ asset('images/Film/' ~ film.imageName) }}" alt="Image actuelle" class="img-fluid rounded shadow-sm" style="max-height: 200px; max-height: 300px;">
+                                    <img src="{{ s3BaseUrl ~ 'images/Film/' ~ film.imageName }}" alt="Image actuelle" class="img-fluid rounded shadow-sm" style="max-height: 200px; max-height: 300px;">
                                     <p class="mt-2 text-muted small">Image actuelle</p>
                                 </div>
                             {% endif %}

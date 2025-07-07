@@ -28,6 +28,7 @@ class FilmsController extends AbstractController
         CinemaRepository $cinemaRepository
     ) {
         $films = $filmRepository->findBy([], ['id' => 'DESC']);
+        $s3BaseUrl = 'https://bucketeer-b78e6166-923a-41f5-8eac-7295c143deb0.s3.eu-west-1.amazonaws.com/';
         $genres = $genreRepository->findAll();
         $seances = $seanceRepository->findAll(); 
         $cinemas = $cinemaRepository->findAll();
@@ -37,6 +38,7 @@ class FilmsController extends AbstractController
             'genres' => $genres,
             'seances' => $seances,
             'cinemas' => $cinemas,
+            's3BaseUrl' => $s3BaseUrl,
         ]);
     }
     #[Route('/films/{id}', name: 'app_film_show')]
@@ -44,6 +46,7 @@ class FilmsController extends AbstractController
     {
         // Récupérer le film 
         $film = $filmRepository->find($id);
+        $s3BaseUrl = 'https://bucketeer-b78e6166-923a-41f5-8eac-7295c143deb0.s3.eu-west-1.amazonaws.com/';
 
         // Redirection si le film n'existe pas
         if (!$film) {
@@ -85,6 +88,7 @@ class FilmsController extends AbstractController
             'avisValides' => $avisValides,
             'form' => $form ? $form->createView() : null,
             'userEmail' => $this->isGranted('ROLE_USER') ? $this->getUser()->getUserIdentifier() : null,
+            's3BaseUrl' => $s3BaseUrl,
         ]);
     }
     

@@ -17,9 +17,10 @@ class FilmController extends AbstractController
     public function index(EntityManagerInterface $entityManager): Response
     {
         $films = $entityManager->getRepository(Film::class)->findAll();
-
+         $s3BaseUrl = 'https://bucketeer-b78e6166-923a-41f5-8eac-7295c143deb0.s3.eu-west-1.amazonaws.com/';
         return $this->render('admin/films/index.html.twig', [
             'films' => $films,
+             's3BaseUrl' => $s3BaseUrl,
         ]);
     }
 
@@ -59,6 +60,7 @@ class FilmController extends AbstractController
     public function edit(Film $film, Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(FilmType::class, $film);
+        $s3BaseUrl = 'https://bucketeer-b78e6166-923a-41f5-8eac-7295c143deb0.s3.eu-west-1.amazonaws.com/';
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -87,6 +89,7 @@ class FilmController extends AbstractController
         return $this->render('admin/films/edit.html.twig', [
             'form' => $form->createView(),
             'film' => $film,
+            's3BaseUrl' => $s3BaseUrl,
         ]);
     }
 

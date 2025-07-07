@@ -28,5 +28,5 @@ flysystem:
       adapter: 'aws'
       options:
         client: 'AwsS3Client'
-        bucket: 'bucketeer-63e6c1dc-17ea-4ba8-bdd9-82869f667264'
+        bucket: 'bucketeer-b78e6166-923a-41f5-8eac-7295c143deb0'
         prefix: 'images/Film'
