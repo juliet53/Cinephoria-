@@ -1,4 +1,4 @@
-name: Deploy to Heroku
+name: Déploiement sur Heroku
 
 on:
   push:
@@ -10,21 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Cloner le dépôt
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Assure l'historique complet pour le push Git
 
-      - name: Install Heroku CLI
+      - name: Installer Heroku CLI
         run: curl https://cli-assets.heroku.com/install.sh | sh
 
-      - name: Login to Heroku CLI
+      - name: Vérifier Heroku CLI
+        run: heroku --version && heroku apps
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku auth:token
 
-      - name: Set Heroku git remote
+      - name: Connexion à Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: echo $HEROKU_API_KEY | heroku auth:token --api-key
+
+      - name: Ajouter la télécommande Git Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
           heroku git:remote -a cinephoriaappj
-          git remote set-url heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/cinephoriaappj.git
+          git remote set-url heroku https://heroku:${HEROKU_API_KEY}@git.heroku.com/cinephoriaappj.git
 
-      - name: Push to Heroku
-        run: git push heroku master
+      - name: Vérifier les télécommandes Git
+        run: git remote -v
+
+      - name: Pousser vers Heroku
+        run: git push heroku master --force
