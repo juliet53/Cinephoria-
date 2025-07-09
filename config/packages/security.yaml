@@ -56,7 +56,7 @@ security:
     - { path: ^/reservation, roles: ROLE_USER }
     - { path: ^/api/login_check, roles: PUBLIC_ACCESS } # Accès public pour la route de login
     - { path: ^/api/incidents, roles: [ROLE_ADMIN, ROLE_EMPLOYER] }
-    # - { path: ^/api, roles: IS_AUTHENTICATED_FULLY } # Sécuriser les routes API
+    - { path: ^/api, roles: IS_AUTHENTICATED_FULLY } # Sécuriser les routes API
 
 when@test:
   security:
