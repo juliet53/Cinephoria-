@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Document\MongoReservation;
@@ -23,7 +24,6 @@ use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
 use League\Flysystem\FilesystemOperator;
 
-
 class ReservationController extends AbstractController
 {
     #[Route('/reservation', name: 'app_reservation')]
@@ -36,21 +36,18 @@ class ReservationController extends AbstractController
         Security $security,
         FilesystemOperator $defaultStorage
     ): Response {
-        // Récupérer les paramètres de l'URL
         $filmFilter = $request->query->get('film', '');
         $dateFilter = $request->query->get('date', '');
 
-        // Récupérer les séances
         if ($filmFilter || $dateFilter) {
             $seances = $seanceRepository->findByFilters(
                 $filmFilter ? urldecode($filmFilter) : null,
-                $dateFilter ? $dateFilter : null
+                $dateFilter ?: null
             );
         } else {
             $seances = $seanceRepository->findAll();
         }
 
-        // Récupérer les places réservées pour chaque séance
         $reservedSeatsBySeance = [];
         foreach ($seances as $seance) {
             $reservations = $reservationRepository->findBy(['seance' => $seance]);
@@ -66,29 +63,18 @@ class ReservationController extends AbstractController
 
         $reservation = new Reservation();
         $form = $this->createForm(ReservationType::class, $reservation);
-
         $form->handleRequest($request);
-        if ($form->isSubmitted()) {
-            // Débogage : inspecter les données soumises et les erreurs
-            dump($request->request->all());
-            dump($form->getErrors(true, true));
-            dump($form->get('seance')->getData());
-            dump($form->get('seats')->getData());
-            dump($form->get('numPersons')->getData());
-        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $seance = $form->get('seance')->getData();
             $selectedSeatsJson = $form->get('seats')->getData();
             $numPersons = $form->get('numPersons')->getData();
 
-            // Valider la séance
             if (!$seance) {
                 $this->addFlash('error', 'Séance non trouvée.');
                 return $this->redirectToRoute('app_reservation');
             }
 
-            // Valider les sièges
             $selectedSeats = json_decode($selectedSeatsJson, true);
             if (!is_array($selectedSeats) || empty($selectedSeats)) {
                 $this->addFlash('error', 'Aucune place sélectionnée ou format invalide.');
@@ -106,7 +92,6 @@ class ReservationController extends AbstractController
                 return $this->redirectToRoute('app_reservation');
             }
 
-            // Vérifier si les places sélectionnées sont déjà réservées
             $reservedSeats = $reservedSeatsBySeance[$seance->getId()] ?? [];
             foreach ($selectedSeats as $seat) {
                 if (in_array($seat, $reservedSeats)) {
@@ -115,25 +100,22 @@ class ReservationController extends AbstractController
                 }
             }
 
-            // Calculer le prix
             $prixUnitaire = $seance->getPrix();
             if ($prixUnitaire === null) {
                 $this->addFlash('error', 'Le prix de la séance n\'est pas défini.');
                 return $this->redirectToRoute('app_reservation');
             }
+
             $prixTotal = $prixUnitaire * $placeReserve;
 
-            // Définir les données de la réservation
             $reservation->setSeance($seance);
             $reservation->setSeats($selectedSeats);
             $reservation->setPlaceReserve($placeReserve);
             $reservation->setPrix($prixTotal);
             $reservation->setUser($security->getUser());
 
-            // Mettre à jour les places disponibles
             $seance->reserverPlaces($placeReserve);
 
-            // Générer le QR Code
             $qrContent = sprintf(
                 "Réservation\nFilm: %s\nDate: %s\nPlaces: %s\nPrix: %.2f€",
                 $seance->getFilm()->getTitle(),
@@ -142,65 +124,46 @@ class ReservationController extends AbstractController
                 $prixTotal
             );
 
-           $builder = new Builder(
-            writer: new PngWriter(),
-            writerOptions: [],
-            validateResult: false,
-            data: $qrContent,
-            encoding: new Encoding('UTF-8'),
-            errorCorrectionLevel: ErrorCorrectionLevel::High, // Utilisation de l'alias
-            size: 300,
-            margin: 10,
-            roundBlockSizeMode: RoundBlockSizeMode::Margin,
-            labelText: 'Cinéphoria',
-            labelFont: new OpenSans(16),
-            labelAlignment: LabelAlignment::Center
-        );
+            $builder = new Builder(
+                writer: new PngWriter(),
+                writerOptions: [],
+                validateResult: false,
+                data: $qrContent,
+                encoding: new Encoding('UTF-8'),
+                errorCorrectionLevel: ErrorCorrectionLevel::High,
+                size: 300,
+                margin: 10,
+                roundBlockSizeMode: RoundBlockSizeMode::Margin,
+                labelText: 'Cinéphoria',
+                labelFont: new OpenSans(16),
+                labelAlignment: LabelAlignment::Center
+            );
 
-        $result = $builder->build();
-
-            // $qrCodeFilename = 'qrcode_' . uniqid() . '.png';
-            // $qrCodePath = '/qrcodes/' . $qrCodeFilename;
-            // $fullQrCodePath = $this->getParameter('kernel.project_dir') . '/public' . $qrCodePath;
-
-            // // Crée le dossier s'il n'existe pas
-            // if (!file_exists(dirname($fullQrCodePath))) {
-            //     mkdir(dirname($fullQrCodePath), 0775, true);
-            // }
-
-            // file_put_contents($fullQrCodePath, $result->getString());
-            // $reservation->setQrCodePath($qrCodePath);
+            $result = $builder->build();
             $qrCodeFilename = 'qrcodes/qrcode_' . uniqid() . '.png';
             $defaultStorage->write($qrCodeFilename, $result->getString());
             $qrCodeUrl = 'https://bucketeer-b78e6166-923a-41f5-8eac-7295c143deb0.s3.eu-west-1.amazonaws.com/images/Film/' . $qrCodeFilename;
             $reservation->setQrCodePath($qrCodeUrl);
 
-
-            // Enregistrer dans MongoDB
             try {
                 $mongoReservation = new MongoReservation();
                 $film = $seance->getFilm();
                 if ($film && method_exists($film, 'getId')) {
-                    $filmId = (string) $film->getId();
-                    $mongoReservation->setFilmId($filmId);
+                    $mongoReservation->setFilmId((string) $film->getId());
                 } else {
                     $this->addFlash('warning', 'ID du film non trouvé, enregistrement MongoDB ignoré.');
-                    dump('Film error:', $film, method_exists($film, 'getId'));
                     throw new \Exception('ID du film non trouvé.');
                 }
                 $mongoReservation->setReservationDate(new DateTime());
                 $mongoReservation->setNumberOfTickets($placeReserve);
                 $mongoReservation->setTotalPrice($prixTotal);
-                dump('MongoReservation:', $mongoReservation);
+
                 $documentManager->persist($mongoReservation);
                 $documentManager->flush();
-                dump('MongoDB save successful for filmId:', $filmId);
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Échec de l\'enregistrement dans MongoDB : ' . $e->getMessage());
-                dump('MongoDB error:', $e->getMessage());
             }
 
-            // Persister les données dans SQL
             $entityManager->persist($reservation);
             $entityManager->persist($seance);
             $entityManager->flush();
