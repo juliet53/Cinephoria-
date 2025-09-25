@@ -121,4 +121,4 @@ exit;
 
 ---
 
-✅ Ton projet est prêt à tourner soit avec **Docker** (recommandé), soit avec **installation manuelle**.
+
