@@ -1,4 +1,4 @@
-# 🎬 Cinéphoria
+#  Cinéphoria
 
 Cinéphoria est une plateforme multi-supports (Web, Mobile, Desktop) permettant :  
 -  La réservation de séances de cinéma  
