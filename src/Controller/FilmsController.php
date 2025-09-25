@@ -57,7 +57,7 @@ class FilmsController extends AbstractController
         $avisValides = $avisRepository->findBy(
             ['film' => $film, 'valide' => true],
             ['id' => 'DESC'],
-            3 // Limiter à 3 avis
+            3 // Limiter à 3 avis a changer si evolution
         );
 
         // Créer le formulaire uniquement si l'utilisateur est CONNECTER

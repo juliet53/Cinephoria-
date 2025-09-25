@@ -1,0 +1,45 @@
+services:
+  db:
+    image: mysql:8.0 
+    container_name: cinephoria_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cinephoria
+      MYSQL_USER: cinephoria
+      MYSQL_PASSWORD: cinephoria
+    ports:
+      - "3307:3306"
+    volumes:
+      - cinephoria_database_data:/var/lib/mysql
+    
+
+  mongo:
+    image: mongo:6.0
+    container_name: cinephoria_mongo
+    restart: always
+    ports:
+      - "27018:27017"
+    volumes:
+      - cinephoria_mongodb_data:/data/db
+    command: ["mongod", "--noauth"] 
+
+  mailer:
+    image: axllent/mailpit
+    container_name: cinephoria_mailer
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  app:
+    image: cinephoria
+    container_name: cinephoria_php
+    ports:
+      - "8080:80"
+    environment:
+      DATABASE_URL: mysql://cinephoria:cinephoria@db:3306/cinephoria
+
+
+volumes:
+  cinephoria_database_data:
+  cinephoria_mongodb_data:

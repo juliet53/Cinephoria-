@@ -24,7 +24,7 @@ class ReservationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
 
-        // Aplatir le tableau de sièges
+        
         $reservedSeats = [];
         foreach ($reservations as $reservation) {
             $reservedSeats = array_merge($reservedSeats, $reservation['seats']);

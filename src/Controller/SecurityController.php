@@ -16,7 +16,7 @@ public function login(
     AuthenticationUtils $authenticationUtils,
     Request $request
 ): Response {
-    // Si l'utilisateur est déjà connecté, redirige-le
+    // Si l'utilisateur est déjà connecté, redirection!!!
     if ($this->getUser()) {
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('admin_home');
