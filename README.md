@@ -1,15 +1,15 @@
 # 🎬 Cinéphoria
 
 Cinéphoria est une plateforme multi-supports (Web, Mobile, Desktop) permettant :  
-- 🎟️ La réservation de séances de cinéma  
-- 🛠️ La gestion des incidents techniques  
-- 🏢 L’administration complète des cinémas  
+-  La réservation de séances de cinéma  
+-  La gestion des incidents techniques  
+-  L’administration complète des cinémas  
 
 ---
 
-## 🚀 Déploiement local
+##  Déploiement local
 
-### 🛠️ Prérequis
+###  Prérequis
 - PHP 8.2  
 - Docker & Docker Compose  
 - Symfony CLI  
@@ -20,7 +20,7 @@ Cinéphoria est une plateforme multi-supports (Web, Mobile, Desktop) permettant 
 
 ---
 
-### 📂 Cloner le dépôt Git
+###  Cloner le dépôt Git
 ```bash
 git clone https://github.com/juliet53/Cinephoria-.git
 cd Cinephoria
@@ -28,7 +28,7 @@ cd Cinephoria
 
 ---
 
-### ⚙️ Créer le fichier `.env.local`
+###  Créer le fichier `.env.local`
 Créer un fichier `.env.local` à la racine du projet et y ajouter :  
 
 ```env
@@ -39,16 +39,16 @@ MAILER_DSN=smtp://mailer:1025
 
 ---
 
-## 🐳 Installation avec Docker (recommandé)
+##  Installation avec Docker
 
-### ▶️ Lancer les conteneurs
+###  Lancer les conteneurs
 ```bash
 docker compose up --build -d
 ```
 
 ---
 
-### 🔍 Vérifier que tout tourne
+###  Vérifier que tout tourne
 ```bash
 docker ps
 ```
@@ -73,7 +73,9 @@ exit
 
 ### 👤 Créer un utilisateur admin
 ```bash
-docker exec -it cinephoria_db mysql -u cinephoria -pcinephoria cinephoria -e "
+docker exec -it cinephoria_db mysql -u cinephoria -p
+mdp : cinephoria
+USE cinephoria;
 INSERT INTO user (email, password, roles) VALUES
 ('cine@demo.com', '$2y$10$WcRtCa1AM4oKoC8wcMhBG.WQQgB11hRW.lE3bxq1DvtV8b9QFfMSa', '[\"ROLE_ADMIN\"]');
 "
@@ -85,11 +87,8 @@ INSERT INTO user (email, password, roles) VALUES
 
 ---
 
-### 🌍 Accéder à l’application
-- Symfony → [http://localhost:8080](http://localhost:8080)  
-- Mailpit → [http://localhost:8025](http://localhost:8025)  
-- MySQL → `localhost:3307`  
-- MongoDB → `localhost:27018`  
+###  Accéder à l’application
+- Symfony → http://127.0.0.1:8080/]   
 
 ---
 
