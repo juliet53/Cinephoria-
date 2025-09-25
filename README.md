@@ -78,7 +78,7 @@ mdp : cinephoria
 USE cinephoria;
 INSERT INTO user (email, password, roles) VALUES
 ('cine@demo.com', '$2y$10$WcRtCa1AM4oKoC8wcMhBG.WQQgB11hRW.lE3bxq1DvtV8b9QFfMSa', '[\"ROLE_ADMIN\"]');
-"
+
 ```
 
 👉 Identifiants de connexion :  
