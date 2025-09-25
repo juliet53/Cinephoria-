@@ -9,6 +9,8 @@ Cinéphoria est une plateforme de gestion de cinéma multi-supports (web, mobile
 
 PHP 8.2 
 
+Docker
+
 Symfony CLI
 
 Symfony 
