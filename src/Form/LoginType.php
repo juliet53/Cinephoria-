@@ -9,6 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;
+use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\IsTrue as RecaptchaTrue;
 
 class LoginType extends AbstractType
 {
@@ -33,7 +35,7 @@ class LoginType extends AbstractType
                 'required' => true,
             ])
             ->add('_remember_me', CheckboxType::class, [
-                'label' => 'Remember me',
+                'label' => 'Se souvenir de moi',
                 'mapped' => false,
                 'required' => false,
                 'attr' => ['class' => 'form-check-input'],
@@ -41,6 +43,9 @@ class LoginType extends AbstractType
             ->add('loginType', HiddenType::class, [
                 'mapped' => false,
                 'data' => $options['loginType'],
+            ])
+            ->add('recaptcha', EWZRecaptchaType::class, [
+                'required' => true,
             ]);
     }
 

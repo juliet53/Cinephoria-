@@ -34,6 +34,7 @@ public function login(
         'loginType' => $loginType,
         'csrf_token_id' => 'authenticate',
     ]);
+    
 
     return $this->render('security/login.html.twig', [
         'form' => $form->createView(),

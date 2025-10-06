@@ -3,48 +3,56 @@
 {% block title %}Connectez-vous{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-10 col-lg-6">
-                {{ form_start(form, {'action': path('app_login'), 'method': 'POST'}) }}
-{% if error %}
-    <div class="alert alert-danger">
-        <strong>Erreur :</strong> {{ error.messageKey|trans(error.messageData, 'security') }}<br>
-        {# Affiche toute la variable d'erreur pour debug #}
-    </div>
-{% endif %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-6">
 
-                    {% if app.user %}
-                        <div class="mb-3">
-                            You are logged in as {{ app.user.userIdentifier }},
-                            <a href="{{ path('app_logout') }}">Logout</a>
-                        </div>
-                    {% endif %}
+            {{ form_start(form, {'action': path('app_login'), 'method': 'POST', 'attr': {'data-turbo': 'false'}}) }}
 
-                    <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
-
-                    {{ form_row(form.email, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_row(form.password, {'attr': {'class': 'form-control'}}) }}
-                   
-                    
-
-                    <div class="checkbox mb-3">
-                        {{ form_label(form._remember_me) }}
-                        {{ form_widget(form._remember_me) }}
+                {% if error %}
+                    <div class="alert alert-danger">
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
                     </div>
-					{{ form_row(form._csrf_token) }}
+                {% endif %}
+
+                {% if app.user %}
                     <div class="mb-3">
-                        <a href="{{ path('app_register') }}">Inscrivez-vous</a>
+                        Connecté en tant que {{ app.user.userIdentifier }},
+                        <a href="{{ path('app_logout') }}">Se déconnecter</a>
                     </div>
-					
+                {% endif %}
 
-                    <button class="btn btn-lg btn-primary" type="submit">
-                        Sign in
-                    </button>
-					 
-                
-                {{ form_end(form) }}
-            </div>
+                <h1 class="h3 mb-3 text-center">Connexion</h1>
+
+                <div class="mb-3">
+                    {{ form_row(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Votre email'}}) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_row(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Votre mot de passe'}}) }}
+                </div>
+
+                <div class="form-check mb-3">
+                    {{ form_widget(form._remember_me, {'attr': {'class': 'form-check-input'}}) }}
+                    {{ form_label(form._remember_me, 'Se souvenir de moi', {'label_attr': {'class': 'form-check-label'}}) }}
+                </div>
+                <div class="mb-3 text-center">
+                    {{ form_widget(form.recaptcha) }}
+                    {{ form_errors(form.recaptcha) }}
+                </div>
+
+                {{ form_row(form._csrf_token) }}
+
+                <div class="mb-3">
+                    <a href="{{ path('app_register') }}">Pas encore inscrit ? Créez un compte</a>
+                </div>
+
+                <div class="text-center">
+                    <button class="btn btn-lg btn-primary w-100" type="submit">Se connecter</button>
+                </div>
+
+            {{ form_end(form) }}
         </div>
     </div>
+</div>
 {% endblock %}
