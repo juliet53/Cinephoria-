@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class FilmTest extends KernelTestCase
 {
-    public function testSomething(): void
+    public function testAddFilm(): void
     {
          self::bootKernel();
          $container = static::getContainer();

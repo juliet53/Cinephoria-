@@ -20,13 +20,13 @@ class AdminAccessTest extends WebTestCase
         $this->entityManager = $container->get('doctrine')->getManager();
         $this->passwordHasher = $container->get('security.password_hasher');
 
-        // Réinitialise la base de données
+        // Réinitialise ma bdd de test 
         $schemaTool = new SchemaTool($this->entityManager);
         $metadata = $this->entityManager->getMetadataFactory()->getAllMetadata();
         $schemaTool->dropSchema($metadata);
         $schemaTool->createSchema($metadata);
 
-        // Crée un utilisateur admin
+        // Crée un utilisateur ADMIN
         $admin = new User();
         $admin->setEmail('admin@test.com');
         $admin->setPassword($this->passwordHasher->hashPassword($admin, 'adminpass'));
@@ -40,10 +40,10 @@ class AdminAccessTest extends WebTestCase
     {
         $admin = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 'admin@test.com']);
 
-        // Simule la connexion de l'admin
+        // Simule la co
         $this->client->loginUser($admin);
 
-        // Accède à la route admin (change la route si nécessaire)
+        // Accède à la route ADMIN
         $this->client->request('GET', '/admin');
 
         // Vérifie que la réponse est 200 OK
