@@ -77,40 +77,9 @@
     </div>
 </div>
 
-<script>
-    const genreFilter = document.getElementById('genreFilter');
-    const dateFilter = document.getElementById('dateFilter');
-    const cinemaFilter = document.getElementById('cinemaFilter');
-    const filmsContainer = document.getElementById('films-container');
-    const filmCards = filmsContainer.getElementsByClassName('film-card');
+{% block javascripts %}
+    <script src="{{ asset('js/film.js') }}"></script>
+{% endblock %}
 
-    function applyFilters() {
-        const selectedGenre = genreFilter.value;
-        const selectedDate = dateFilter.value;
-        const selectedCinema = cinemaFilter.value;
-
-        Array.from(filmCards).forEach(card => {
-            const genres = card.dataset.genres ? card.dataset.genres.split(',') : [];
-            const seances = card.dataset.seances ? card.dataset.seances.split(',') : [];
-            const cinemas = card.dataset.cinemas ? card.dataset.cinemas.split(',') : [];
-
-            const matchGenre = !selectedGenre || genres.includes(selectedGenre);
-            const matchDate = !selectedDate || seances.includes(selectedDate);
-            const matchCinema = !selectedCinema || cinemas.includes(selectedCinema);
-
-            if (matchGenre && matchDate && matchCinema) {
-                card.classList.remove('d-none');
-            } else {
-                card.classList.add('d-none');
-            }
-        });
-    }
-
-    genreFilter.addEventListener('change', applyFilters);
-    dateFilter.addEventListener('change', applyFilters);
-    cinemaFilter.addEventListener('change', applyFilters);
-
-    document.addEventListener('DOMContentLoaded', applyFilters);
-</script>
 
 {% endblock %}

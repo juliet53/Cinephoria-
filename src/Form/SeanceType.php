@@ -47,7 +47,7 @@ class SeanceType extends AbstractType
             ->add('prix', NumberType::class, [
                 'label' => 'Prix',
                 'attr' => ['class' => 'form-control'],
-                'scale' => 2, // Précision à 2 décimales
+                'scale' => 2, //  2 décimales
                 'required' => true,
             ])
         ;

@@ -22,6 +22,7 @@ class ContactTest extends WebTestCase
         $form["contact[email]"] = "test@example.com";
         $form["contact[description]"] = "Mon super test";
         $form["contact[content]"] = "Ceci est super test";
+        
 
         //Soumettre le form
         $client->submit($form);
@@ -34,7 +35,7 @@ class ContactTest extends WebTestCase
 
         $client->followRedirect();
 
-        //Verif texte de succes
+        
         
         $this->assertSelectorTextContains('.alert.alert-success', 'Votre message a été envoyé avec succès !');
 

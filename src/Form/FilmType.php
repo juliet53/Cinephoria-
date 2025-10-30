@@ -9,6 +9,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
@@ -53,8 +55,31 @@ class FilmType extends AbstractType
                         'mimeTypesMessage' => 'Veuillez uploader une image valide (JPEG, PNG, WEBP)',
                     ])
                 ],
-            ])
-        ;
+            ]);
+        
+        
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $data = $event->getData();
+
+            if (!$data) {
+                return;
+            }
+
+            //  nettoyage 
+            if (isset($data['title'])) {
+                $data['title'] = strip_tags($data['title']);
+            }
+
+            if (isset($data['description'])) {
+                $data['description'] = strip_tags($data['description']);
+            }
+
+            if (isset($data['director'])) {
+                $data['director'] = strip_tags($data['director']);
+            }
+
+            $event->setData($data);
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void

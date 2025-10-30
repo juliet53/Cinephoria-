@@ -39,14 +39,21 @@ class ReservationController extends AbstractController
         $filmFilter = $request->query->get('film', '');
         $dateFilter = $request->query->get('date', '');
 
-        if ($filmFilter || $dateFilter) {
-            $seances = $seanceRepository->findByFilters(
-                $filmFilter ? urldecode($filmFilter) : null,
-                $dateFilter ?: null
-            );
-        } else {
-            $seances = $seanceRepository->findAll();
-        }
+        // if ($filmFilter || $dateFilter) {
+        //     $seances = $seanceRepository->findByFilters(
+        //         $filmFilter ? urldecode($filmFilter) : null,
+        //         $dateFilter ?: null
+        //     );
+        // } else {
+        //     $seances = $seanceRepository->findAll();
+        // }
+
+
+        //Toujours récupérer uniquement les séances à venir, avec filtres optionnels
+        $seances = $seanceRepository->findByFilters(
+            $filmFilter ? urldecode($filmFilter) : null,
+            $dateFilter ?: null
+        );
 
         $reservedSeatsBySeance = [];
         foreach ($seances as $seance) {

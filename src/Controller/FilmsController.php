@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Avis;
 use App\Form\AvisType;
+use App\Form\SeanceType;
 use App\Repository\AvisRepository;
 use App\Repository\CinemaRepository;
 use App\Repository\FilmRepository;
@@ -42,10 +43,11 @@ class FilmsController extends AbstractController
         ]);
     }
     #[Route('/films/{id}', name: 'app_film_show')]
-    public function show(int $id, FilmRepository $filmRepository, EntityManagerInterface $entityManager, Request $request, AvisRepository $avisRepository): Response
+    public function show(int $id, FilmRepository $filmRepository, SeanceRepository $seanceRepository, EntityManagerInterface $entityManager, Request $request, AvisRepository $avisRepository): Response
     {
         // Récupérer le film 
         $film = $filmRepository->find($id);
+        $seances = $seanceRepository->findFutureSeancesByFilm($film);
         $s3BaseUrl = 'https://bucketeer-b78e6166-923a-41f5-8eac-7295c143deb0.s3.eu-west-1.amazonaws.com/';
 
         // Redirection si le film n'existe pas
@@ -85,6 +87,7 @@ class FilmsController extends AbstractController
         // Rendre le template avec le film, les avis et le formulaire
         return $this->render('films/show.html.twig', [
             'film' => $film,
+            'seances'=> $seances,
             'avisValides' => $avisValides,
             'form' => $form ? $form->createView() : null,
             'userEmail' => $this->isGranted('ROLE_USER') ? $this->getUser()->getUserIdentifier() : null,

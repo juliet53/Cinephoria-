@@ -21,8 +21,8 @@ class UserType extends AbstractType
                     'Employeur' => 'ROLE_EMPLOYER',
                     'Administrateur' => 'ROLE_ADMIN',
                 ],
-                'expanded' => true,  // Affiche en boutons radio
-                'multiple' => false, // Un seul rôle peut être sélectionné
+                'expanded' => true,  
+                'multiple' => false, 
                 'label' => 'Rôle',
             ])
             ->add('password');
