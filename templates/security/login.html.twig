@@ -44,6 +44,12 @@
                 {{ form_row(form._csrf_token) }}
 
                 <div class="mb-3">
+                    <a href="{{ path('app_forgot_password_request') }}" class="text-primary text-decoration-underline">
+                        Mot de passe oublié ?
+                    </a>
+                </div>
+
+                <div class="mb-3">
                     <a href="{{ path('app_register') }}">Pas encore inscrit ? Créez un compte</a>
                 </div>
 
