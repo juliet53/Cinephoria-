@@ -157,7 +157,7 @@ class ResetPasswordController extends AbstractController
         }
 
         $email = (new TemplatedEmail())
-            ->from(new Address('cinephoria13@gmail.com', 'cinephoria'))
+            ->from(new Address('jalildahha13@gmail.com', 'cinephoria'))
             ->to((string) $user->getEmail())
             ->subject('Your password reset request')
             ->htmlTemplate('reset_password/email.html.twig')
@@ -167,16 +167,16 @@ class ResetPasswordController extends AbstractController
         ;
 
        try {
-    $mailer->send($email);
-    $this->addFlash('success', 'Email envoyé !');
-} catch (\Exception $e) {
-    // Affiche l'erreur dans les logs + flash
-    $this->addFlash('error', 'ERREUR EMAIL : ' . $e->getMessage());
-    \error_log('EMAIL ERROR: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
-    
-    // Pour debug : arrête tout et affiche l'erreur
-    dd($e->getMessage(), $e->getTraceAsString());
-}
+        $mailer->send($email);
+        $this->addFlash('success', 'Email envoyé !');
+        } catch (\Exception $e) {
+            // Affiche l'erreur dans les logs + flash
+            $this->addFlash('error', 'ERREUR EMAIL : ' . $e->getMessage());
+            \error_log('EMAIL ERROR: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+            
+            // Pour debug : arrête tout et affiche l'erreur
+            dd($e->getMessage(), $e->getTraceAsString());
+        }
 
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);
