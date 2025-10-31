@@ -51,6 +51,7 @@ security:
     - { path: ^/admin/films, roles: [ROLE_ADMIN, ROLE_EMPLOYER] }
     - { path: ^/admin/seance, roles: [ROLE_ADMIN, ROLE_EMPLOYER] }
     - { path: ^/admin/salles, roles: [ROLE_ADMIN, ROLE_EMPLOYER] }
+    - { path: ^/admin/avis, roles: [ROLE_ADMIN, ROLE_EMPLOYER] }
     - { path: ^/admin, roles: ROLE_ADMIN }
     - { path: ^/employe, roles: ROLE_EMPLOYER }
     - { path: ^/reservation, roles: ROLE_USER }

@@ -11,7 +11,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Http\Attribute\IsGranted as AttributeIsGranted;
 
 #[Route('/admin/avis')]
-#[AttributeIsGranted('ROLE_ADMIN')]
 final class AdminAvisController extends AbstractController
 {
         #[Route('/', name: 'app_admin_avis')]
