@@ -44,7 +44,7 @@ class AdminstatController extends AbstractController
                 // Récupérer le titre du film
                 $film = $filmRepository->find($filmId);
                 if ($film) {
-                    $reservationsByFilm[$filmId]['title'] = $film->getTitle(); // Assumes Film has getTitle()
+                    $reservationsByFilm[$filmId]['title'] = $film->getTitle(); 
                 }
             }
             $reservationsByFilm[$filmId]['tickets'] += $reservation->getNumberOfTickets();

@@ -58,8 +58,7 @@ class FilmsController extends AbstractController
         // Récupérer les trois derniers avis validés, triés par ID descendant !!!!!!!!!!!!!!
         $avisValides = $avisRepository->findBy(
             ['film' => $film, 'valide' => true],
-            ['id' => 'DESC'],
-            3 // Limiter à 3 avis a changer si evolution
+            ['id' => 'DESC'] // Limiter à 3 avis a changer si evolution
         );
 
         // Créer le formulaire uniquement si l'utilisateur est CONNECTER
