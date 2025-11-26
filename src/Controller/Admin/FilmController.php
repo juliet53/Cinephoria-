@@ -39,8 +39,6 @@ class FilmController extends AbstractController
                 // Récup infos du fichire télécharge 
                 $film->setImageName($imageFile->getClientOriginalName());
                 $film->setImageSize($imageFile->getSize());
-
-                // On peut aussi définir l'image avant de persister le film
                 $film->setImageFile($imageFile);
             }
 
@@ -67,11 +65,9 @@ class FilmController extends AbstractController
             // Gérer l'image uploadée
             $imageFile = $form->get('imageFile')->getData();
             if ($imageFile) {
-                // Récupérer les informations du fichier téléchargé
+                // Récupérer les infos
                 $film->setImageName($imageFile->getClientOriginalName());
                 $film->setImageSize($imageFile->getSize());
-
-                // On peut aussi définir l'image avant de persister le film
                 $film->setImageFile($imageFile);
             }
 

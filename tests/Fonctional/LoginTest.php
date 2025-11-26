@@ -56,7 +56,7 @@ class AdminAccessTest extends WebTestCase
         // Un utilisateur non connecté tente d'accéder
         $this->client->request('GET', '/admin');
 
-        // Vérifie que l'utilisateur est redirigé vers /login (ou autre)
+        // Vérifie que l'utilisateur est redirigé vers /login
         $this->assertResponseRedirects('/login');
     }
 }

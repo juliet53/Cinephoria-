@@ -16,10 +16,10 @@ class ReservationControllerTest extends WebTestCase
         $client = static::createClient();
         $entityManager = $client->getContainer()->get('doctrine')->getManager();
         
-        $connection = $entityManager->getConnection();          // ✅ d'abord la connexion
-        $platform   = $connection->getDatabasePlatform();       // ✅ ensuite la plateforme
+        $connection = $entityManager->getConnection();         
+        $platform   = $connection->getDatabasePlatform();     
 
-        // 🧹 Nettoyage des tables dans le bon ordre
+        //  Nettoyage des tables 
         $connection->executeStatement('SET FOREIGN_KEY_CHECKS=0');
         $connection->executeStatement($platform->getTruncateTableSQL('reservation', true));
         $connection->executeStatement($platform->getTruncateTableSQL('seance', true));
@@ -36,14 +36,14 @@ class ReservationControllerTest extends WebTestCase
             $entityManager->flush();
         }
 
-        // --- Création d'un utilisateur de test ---
+        //  Création d'un utilisateur de test 
         $user = new User();
         $user->setEmail('testuser@example.com');
         $user->setPassword(password_hash('password123', PASSWORD_BCRYPT));
         $user->setRoles(['ROLE_USER']);
         $entityManager->persist($user);
 
-        // --- Création d'un film de test ---
+        //  Création d'un film de test 
         $film = new Film();
         $film->setTitle('Film Test');
         $film->setDescription('Description test');
@@ -52,21 +52,21 @@ class ReservationControllerTest extends WebTestCase
 
 
 
-        // --- Création d'un cinéma de test ---
+        //  Création d'un cinéma de test 
         $cinema = new Cinema();
         $cinema->setNom('Cinephoria Test');
-        $cinema->setVille('Paris'); // <-- obligatoire
+        $cinema->setVille('Paris'); 
         $entityManager->persist($cinema);
         
-        // --- Création d'une salle de test ---
+        //  Création d'une salle de test 
         $salle = new Salle();
-        $salle->setNumero(1);          // numéro de salle
-        $salle->setCapacite(50);       // nombre total de places
+        $salle->setNumero(1);         
+        $salle->setCapacite(50);       
         $salle->setQualite('Standard');
         $salle->setCinema($cinema);
         $entityManager->persist($salle);
 
-        // --- Création d'une séance future ---
+        //  Création d'une séance future 
         $seance = new Seance();
         $seance->setFilm($film);
         $seance->setSalle($salle);
@@ -79,15 +79,15 @@ class ReservationControllerTest extends WebTestCase
 
         $entityManager->flush();
 
-        // --- Se connecter avec l'utilisateur ---
+        //  Se connecter avec l'utilisateur 
         $client->loginUser($user);
 
-        // --- Accéder à la page de réservation ---
+        // Accéder à la page de réservation 
         $crawler = $client->request('GET', '/reservation');
 
         $this->assertResponseIsSuccessful();
 
-        // --- Soumettre le formulaire de réservation ---
+        // Soumettre le formulaire de réservation 
         $form = $crawler->filter('form[name="reservation"]')->form([
             'reservation[seance]' => $seance->getId(),
             'reservation[numPersons]' => 2,
@@ -98,13 +98,13 @@ class ReservationControllerTest extends WebTestCase
 
         $this->assertResponseRedirects('/user/reservations');
 
-        // --- Vérifier que la réservation est bien en base ---
+        //  Vérifier que la réservation est bien en base 
         $reservation = $entityManager
             ->getRepository(\App\Entity\Reservation::class)
             ->findOneBy(['user' => $user, 'seance' => $seance]);
 
         $this->assertNotNull($reservation);
         $this->assertEquals(2, $reservation->getPlaceReserve());
-        $this->assertEquals(20.0, $reservation->getPrix()); // 2 places x 10€
+        $this->assertEquals(20.0, $reservation->getPrix()); 
     }
 }
