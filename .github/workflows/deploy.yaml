@@ -1,42 +1,39 @@
-# name: Déploiement sur Heroku
+name: Déploiement sur Heroku
 
-# on:
-#   push:
-#     branches:
-#       - master
+# Déclenché après le succès du workflow "Tests"
+on:
+  workflow_run:
+    workflows: ["Tests"]
+    types:
+      - completed
 
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
+jobs:
+  deploy:
+    # Déploiement seulement si les tests ont réussi
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Cloner le dépôt
-#         uses: actions/checkout@v4
-#         with:
-#           fetch-depth: 0 
+    steps:
+      - name: Cloner le dépôt
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-#       - name: Installer Heroku CLI
-#         run: curl https://cli-assets.heroku.com/install.sh | sh
+      - name: Installer Heroku CLI
+        run: curl https://cli-assets.heroku.com/install.sh | sh
 
-#       - name: Vérifier Heroku CLI
-#         run: heroku --version && heroku apps
-#         env:
-#           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      - name: Vérifier Heroku CLI
+        run: heroku --version
 
-#       - name: Connexion à Heroku
-#         env:
-#           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-#         run: echo $HEROKU_API_KEY | heroku auth:token --api-key
+      - name: Ajouter la télécommande Git Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          git remote add heroku https://heroku:${HEROKU_API_KEY}@git.heroku.com/cinephoriaappj.git
+          git remote set-url heroku https://heroku:${HEROKU_API_KEY}@git.heroku.com/cinephoriaappj.git
 
-#       - name: Ajouter la télécommande Git Heroku
-#         env:
-#           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-#         run: |
-#           heroku git:remote -a cinephoriaappj
-#           git remote set-url heroku https://heroku:${HEROKU_API_KEY}@git.heroku.com/cinephoriaappj.git
+      - name: Vérifier les télécommandes Git
+        run: git remote -v
 
-#       - name: Vérifier les télécommandes Git
-#         run: git remote -v
-
-#       - name: Pousser vers Heroku
-#         run: git push heroku master --force
+      - name: Pousser vers Heroku
+        run: git push heroku master --force
