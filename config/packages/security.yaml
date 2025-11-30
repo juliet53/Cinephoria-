@@ -46,7 +46,7 @@ security:
         default_target_path: /redirect # Redirection après la connexion
         csrf_token_id: authenticate
 
-  # Contrôle d'accès
+  # Contrôle DES ROLES
   access_control:
     - { path: ^/admin/films, roles: [ROLE_ADMIN, ROLE_EMPLOYER] }
     - { path: ^/admin/seance, roles: [ROLE_ADMIN, ROLE_EMPLOYER] }
@@ -55,9 +55,9 @@ security:
     - { path: ^/admin, roles: ROLE_ADMIN }
     - { path: ^/employe, roles: ROLE_EMPLOYER }
     - { path: ^/reservation, roles: ROLE_USER }
-    - { path: ^/api/login_check, roles: PUBLIC_ACCESS } # Accès public pour la route de login
+    - { path: ^/api/login_check, roles: PUBLIC_ACCESS } 
     - { path: ^/api/incidents, roles: [ROLE_ADMIN, ROLE_EMPLOYER] }
-    - { path: ^/api, roles: IS_AUTHENTICATED_FULLY } # Sécuriser les routes API
+    - { path: ^/api, roles: IS_AUTHENTICATED_FULLY } 
 
 when@test:
   security:

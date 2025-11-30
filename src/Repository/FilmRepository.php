@@ -17,24 +17,29 @@ class FilmRepository extends ServiceEntityRepository
     }
 
     public function findFilmsAddedLastWednesday(): array
-{
-    $today = new \DateTimeImmutable('today');
-    $dayOfWeek = $today->format('w'); 
+    {
+        $today = new \DateTimeImmutable('today');
+        $dayOfWeek = $today->format('w'); 
 
-    $daysToSubtract = ($dayOfWeek >= 3) ? $dayOfWeek - 3 : 7 - (3 - $dayOfWeek);
-    $lastWednesday = $today->modify("-$daysToSubtract days");
+        if ($dayOfWeek >= 3) {
+            $daysToSubtract = $dayOfWeek - 3;
+        } else {
+            $daysToSubtract = 7 - (3 - $dayOfWeek);
+        }
 
-    $start = $lastWednesday->setTime(0, 0);
-    $end = $lastWednesday->setTime(23, 59, 59);
+        $lastWednesday = $today->modify("-$daysToSubtract days");
 
-    return $this->createQueryBuilder('f')
-        ->andWhere('f.createdAt BETWEEN :start AND :end')
-        ->setParameter('start', $start)
-        ->setParameter('end', $end)
-        ->orderBy('f.createdAt', 'DESC')
-        ->getQuery()
-        ->getResult();
-}
+        $start = $lastWednesday->setTime(0, 0);
+        $end = $lastWednesday->setTime(23, 59, 59);
+
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.createdAt BETWEEN :start AND :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->orderBy('f.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 
 
     //    /**

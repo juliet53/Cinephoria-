@@ -2,13 +2,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordFields = document.querySelectorAll('input[type="password"]');
 
     passwordFields.forEach(field => {
-        // 🔸 Conteneur messages
+       
         const message = document.createElement('div');
         message.classList.add('password-message', 'mt-1');
         message.style.fontSize = '0.9em';
         field.parentNode.appendChild(message);
 
-        // 🔸 Barre de progression
+        
         const strengthBar = document.createElement('div');
         strengthBar.style.height = '6px';
         strengthBar.style.borderRadius = '4px';
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 message.style.color = 'green';
             }
 
-            // Mise à jour de la barre de sécurité
+           
             if (strength === 0) {
                 strengthBar.style.width = '0';
                 strengthBar.style.backgroundColor = 'transparent';

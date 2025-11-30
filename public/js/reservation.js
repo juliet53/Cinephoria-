@@ -176,7 +176,7 @@ function updateSeanceDisplay() {
 	            // Appliquer les filtres au chargement
 	            filterSeances();
 	
-	            console.log("reservation_seance au chargement:", document.getElementById('reservation_seance'));
+	            
 	        });
 	
 	        function filterSeances() {

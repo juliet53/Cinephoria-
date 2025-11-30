@@ -11,9 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-/**
- * @IsGranted("ROLE_ADMIN")
- */
+
 class AdminstatController extends AbstractController
 {
     #[Route('/admin/reservations/stats', name: 'admin_reservation_stats')]
