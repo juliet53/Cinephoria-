@@ -63,7 +63,7 @@ class EmployeSeanceController extends AbstractController
     #[Route('/{id}/delete', name: 'employe_seance_delete', methods: ['POST'])]
     public function delete(): Response
     {
-        // Bloquer la suppression pour les employés
+        
         $this->addFlash('error', 'Vous n’avez pas l’autorisation de supprimer une séance.');
         return $this->redirectToRoute('employe_seance_index');
     }

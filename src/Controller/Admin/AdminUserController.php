@@ -42,7 +42,7 @@ class AdminUserController extends AbstractController
             $user->setPassword($hashedPassword);
 
             // Sauvegarder l'utilisateur
-            $entityManager = $this->doctrine->getManager(); // Utilisation de l'EntityManager via ManagerRegistry
+            $entityManager = $this->doctrine->getManager(); 
             $entityManager->persist($user);
             $entityManager->flush();
 

@@ -36,7 +36,6 @@ class FilmController extends AbstractController
 
             // Si un fichier est téléchargé
             if ($imageFile) {
-                // Récup infos du fichire télécharge 
                 $film->setImageName($imageFile->getClientOriginalName());
                 $film->setImageSize($imageFile->getSize());
                 $film->setImageFile($imageFile);
