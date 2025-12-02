@@ -1,14 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Recup du password
     const passwordFields = document.querySelectorAll('input[type="password"]');
 
     passwordFields.forEach(field => {
        
+        // Div pour le message
         const message = document.createElement('div');
         message.classList.add('password-message', 'mt-1');
         message.style.fontSize = '0.9em';
         field.parentNode.appendChild(message);
 
-        
+        // La barre pour le visuel
         const strengthBar = document.createElement('div');
         strengthBar.style.height = '6px';
         strengthBar.style.borderRadius = '4px';
@@ -17,19 +19,22 @@ document.addEventListener('DOMContentLoaded', () => {
         field.parentNode.appendChild(strengthBar);
 
         field.addEventListener('input', () => {
+            // je recup la valeur 
             const value = field.value;
+            // score de 0 a 3 
             let strength = 0;
+            // les regles pas respecter
             const errors = [];
 
-            // Longueur
+            // Longueur je veux min 8 caracteres
             if (value.length >= 8) strength++;
             else errors.push('• Au moins 8 caractères');
 
-            // Majuscule
+            // Au moin 1 maj
             if (/[A-Z]/.test(value)) strength++;
             else errors.push('• Au moins une lettre majuscule');
 
-            // Caractère spécial
+            // 1 caractere spe
             if (/[!@#$%^&*(),.?":{}|<>]/.test(value)) strength++;
             else errors.push('• Au moins un caractère spécial');
 
@@ -42,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 message.style.color = 'green';
             }
 
-           
+            // Mise a jour de la barre 
             if (strength === 0) {
                 strengthBar.style.width = '0';
                 strengthBar.style.backgroundColor = 'transparent';
@@ -59,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 🚫 Vérification avant soumission
+    //  Vérification avant soumission
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
         form.addEventListener('submit', (e) => {
@@ -72,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     /[!@#$%^&*(),.?":{}|<>]/.test(value);
 
                 if (!isValid) {
+                    // Si c'est pas valid j'empeche l'envoie!!!
                     e.preventDefault();
                     alert('⚠️ Votre mot de passe n’est pas assez sécurisé.');
                 }

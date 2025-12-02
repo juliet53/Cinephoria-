@@ -36,7 +36,7 @@ function updateSeanceDisplay() {
     document.getElementById('placesAvailableDisplay').textContent = '0';
 }
 	
-	        function toggleSelection(card) {
+			function toggleSelection(card) {
 	            const numPersons = document.getElementById('reservation_numPersons').value;
 	            if (!numPersons || numPersons <= 0) {
 	                alert("Veuillez d'abord saisir le nombre de personnes.");
@@ -48,14 +48,7 @@ function updateSeanceDisplay() {
 	                alert("Aucune place disponible pour cette séance.");
 	                return;
 	            }
-	
-	            // Vérifier si l'élément reservation_seance existe
-	            const selectedSeancesInput = document.getElementById('reservation_seance');
-	            if (!selectedSeancesInput) {
-	                console.error("Champ 'reservation_seance' introuvable.");
-	                alert("Erreur : impossible de sélectionner une séance. Veuillez recharger la page.");
-	                return;
-	            }
+				const selectedSeancesInput = document.getElementById('reservation_seance');
 	
 	            // Désélectionner toute autre séance
 	            document.querySelectorAll('.seance-card .card').forEach(c => c.classList.remove('selected'));
@@ -103,7 +96,7 @@ function updateSeanceDisplay() {
 	                    seat.style.width = '20px';
 	                    seat.style.height = '20px';
 	
-	                    // Si la place est réservée, la désactiver et la mettre en rouge
+	                    // Si la place est réservée, la désactiver 
 	                    if (reservedSeats.includes(seatLabel)) {
 	                        seat.disabled = true;
 	                        seat.style.backgroundColor = 'red';
@@ -147,10 +140,6 @@ function updateSeanceDisplay() {
 	
 	        document.addEventListener('DOMContentLoaded', function () {
 	            const form = document.getElementById('reservationForm');
-	            if (!form) {
-	                console.error("Formulaire 'reservationForm' introuvable.");
-	                return;
-	            }
 	
 	            form.addEventListener('submit', function (e) {
 	                const selectedSeats = document.querySelectorAll('input[name="seats[]"]:checked');
@@ -165,12 +154,6 @@ function updateSeanceDisplay() {
 	                const seatsHiddenField = document.getElementById('reservation_seats');
 	                const selectedSeatsArray = Array.from(selectedSeats).map(cb => cb.value);
 	                seatsHiddenField.value = JSON.stringify(selectedSeatsArray);
-	
-	                console.log("Données envoyées:", {
-	                    seance: document.getElementById('reservation_seance').value,
-	                    seats: seatsHiddenField.value,
-	                    numPersons: numPersons
-	                });
 	            });
 	
 	            // Appliquer les filtres au chargement
@@ -197,4 +180,4 @@ function updateSeanceDisplay() {
 	                    seance.style.display = 'none';
 	                }
 	            });
-	        }
+	        }	        
