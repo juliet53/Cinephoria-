@@ -8,20 +8,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Recupération de mon code
         uses: actions/checkout@v4
 
-      - name: Setup PHP
+      - name: installation de PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
           tools: composer:v2
           extensions: mongodb-1.18.0
 
-      - name: Setup Composer Cache
+      - name: Recuperation du chemin du cache composer et j'enregistre dans github
         run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
 
-      - name: Cache Composer dependencies
+      - name: Cache Composer 
         uses: actions/cache@v4
         with:
           path: ${{ env.COMPOSER_CACHE_DIR }}
@@ -29,17 +29,17 @@ jobs:
           restore-keys: |
             php8.2-composer-
 
-      - name: Install Composer dependencies (no scripts)
+      - name: Install de Composer
         run: composer install --prefer-dist --no-interaction --no-scripts --no-progress
 
-      - name: Run Security Audit
+      - name: lancement de l'audit et savegarde direct dans un  fichier json
         run: |
           composer audit --format=json > security-audit.json
 
-      - name: Check if report file exists
+      - name: verif que le fichier existe
         run: ls -lh security-audit.json
 
-      - name: Upload Security Audit Report
+      - name: telecharge l'audit dans github action
         uses: actions/upload-artifact@v4
         if: always()
         with:

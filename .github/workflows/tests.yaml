@@ -22,20 +22,20 @@ jobs:
           --health-retries=5
 
     steps:
-      - name: Checkout
+      - name: recup le code
         uses: actions/checkout@v4
 
-      - name: Setup PHP
+      - name: installation de php
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
           tools: composer:v2
           extensions: mongodb-1.18.0
 
-      - name: Setup Composer Cache
+      - name: Recuperation du chemin du cache composer et j'enregistre dans github
         run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
 
-      - name: Cache Composer dependencies
+      - name: Cache Composer 
         uses: actions/cache@v4
         with:
           path: ${{ env.COMPOSER_CACHE_DIR }}
@@ -43,18 +43,18 @@ jobs:
           restore-keys: |
             php8.2-composer-
 
-      - name: Install Composer dependencies
+      - name: Install Composer 
         run: composer install --prefer-dist --no-interaction --no-scripts --no-progress
         
 
-      - name: Install importmap assets
+      - name: Installation des asset
         run: php bin/console importmap:install
 
 
-      - name: Wait for DB
+      - name: pause pour bdd
         run: sleep 10
 
-      - name: Run PHPUnit
+      - name: Run PHPUnit lancement de mes tests
         run: php bin/phpunit
         env:
           APP_ENV: test
